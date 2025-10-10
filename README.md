@@ -53,12 +53,18 @@ We release the following datasets for research use:
 
 
 <p align="center"><small><b>Examples</b> of dataset types:</small></p>
-<p align="center">
-  <img src="./assets/fcgc.png" alt="FC/GC examples" width="800">
-</p>
-<p align="center">
-  <img src="./assets/sfcsgc.png" alt="SFC/SGC examples" width="800">
-</p>
+<table>
+  <tr>
+    <td align="center">
+      <img src="./assets/fcgc.png" alt="FC/GC examples" width="400"><br>
+      <sub><b>FC / GC</b></sub>
+    </td>
+    <td align="center">
+      <img src="./assets/sfcsgc.png" alt="SFC/SGC examples" width="400"><br>
+      <sub><b>SFC / SGC</b></sub>
+    </td>
+  </tr>
+</table>
 
 **All datasets include:**
 - ✅ High-resolution images with photorealistic relighting and blending
