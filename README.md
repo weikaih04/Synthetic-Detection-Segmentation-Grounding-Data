@@ -10,7 +10,7 @@
 <h2 align="center">
   <!-- <a href="https://generate-any-scene.github.io/">🌐 Website</a> | -->
   <a href="./assets/paper.pdf">📑 Paper</a> |
-  <a href="https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c">🤗  Dataset (1M images + 20M objects))</a>
+  <a href="https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c">🤗  Datasets: 1M images + 20M segments</a>
 </h2>
 
 <p align="center"><small>
@@ -46,15 +46,10 @@ We release the following datasets for research use:
 
 | Dataset Name | # Images | # Categories | Description | Download |
 |-------------|----------|--------------|-------------|----------|
-| **FC-50K** | 50,000 | 1,600 | Frequent Categories (LVIS, COCO, ADE20K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
-| **FC-100K** | 100,000 | 1,600 | Frequent Categories (LVIS, COCO, ADE20K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
-| **FC-400K** | 400,000 | 1,600 | Frequent Categories (LVIS, COCO, ADE20K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
-| **GC-50K** | 50,000 | ~40,000 | General Categories (LAION, GQA, Flickr30K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
-| **GC-100K** | 100,000 | ~40,000 | General Categories (LAION, GQA, Flickr30K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
-| **SFC-50K** | 50,000 | 1,600 | Single Frequent Category - multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
-| **SFC-100K** | 100,000 | 1,600 | Single Frequent Category - multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
-| **SGC-50K** | 50,000 | ~40,000 | Single General Category - multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
-| **SGC-100K** | 100,000 | ~40,000 | Single General Category - multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+| **FC-1M** | 1,000,000 | 1,600 | Frequent Categories (LVIS, COCO, ADE20K) | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-FC-1M) |
+| **GC-1M** | 1,000,000 | ~40,000 | General Categories (LAION, GQA, Flickr30K) | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-GC-1M) |
+| **SFC-200K** | 200,000 | 1,600 | Single Frequent Category — multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SFC-200K) |
+| **SGC-200K** | 200,000 | ~40,000 | Single General Category — multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SGC-200K) |
 
 **All datasets include:**
 - ✅ High-resolution images with photorealistic relighting and blending
