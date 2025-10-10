@@ -2,10 +2,15 @@
   SOS: Synthetic Object Segments Improve Detection, Segmentation, and Grounding
 </h1>
 
+<h2 align="center" style="color: #ef4444;">
+  10M Diverse, Accurate Synthetic Images + 20M Dense-Annotated Objects to Supercharge Grounding-DINO, Mask2Former, and Any Detectors / Segmentors / Grounding-VLMs
+</h2>
+
+
 <h2 align="center">
   <!-- <a href="https://generate-any-scene.github.io/">🌐 Website</a> | -->
   <a href="./assets/paper.pdf">📑 Paper</a> |
-  <a href="https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c">🤗  Dataset</a>
+  <a href="https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c">🤗  Dataset (10M images + 20M objects))</a>
 </h2>
 
 <p align="center"><small>
@@ -18,11 +23,17 @@
 
 ---
 
+<p align="center">
+  <img src="./assets/teaser.png" alt="Text-to-Image Results" width="800">
+</p>
+<p align="center">A scalable pipeline for composing high-quality synthetic object segments into richly annotated images for object detection, instance segmentation, and visual grounding. We generate <b>20M object segments</b> and compose them into <b>2M synthetic images</b> with accurate masks, bounding boxes, and referring expressions.</p>
+
+
 ## 🌟 Highlights
 
 **Why SOS?** A small amount of high-quality synthetic data can outperform orders of magnitude more real data:
 
-- 🚀 **Efficient & Scalable**: Just **50K** SOS images match the gains from **20M** model-generated (GRIT) or **200K** human-annotated (V3Det) images on LVIS detection
+- 🚀 **Efficient & Scalable**: Just **50K** SOS images match the gains from **20M** model-generated (GRIT) or **200K** human-annotated (V3Det) images on LVIS detection. We scale to 10 million diverse images with annotations, along with 20 million synthetic objects across 47,000+ categories from Flux. 
 - 🎯 **Accurate Annotations**: Object-centric composition provides pixel-perfect masks, boxes, and referring expressions—no noisy pseudo-labels
 - 🎨 **Controllable Generation**: Synthesize targeted data for specific scenarios (e.g., intra-class referring, rare categories, domain-specific applications)
 - 🔄 **Complementary to Real Data**: Adding SOS to existing datasets (COCO, LVIS, V3Det, GRIT) yields consistent additive gains across all benchmarks
@@ -30,10 +41,6 @@
 
 ---
 
-<p align="center">
-  <img src="./assets/teaser.png" alt="Text-to-Image Results" width="800">
-</p>
-<p align="center">A scalable pipeline for composing high-quality synthetic object segments into richly annotated images for object detection, instance segmentation, and visual grounding. We generate <b>20M object segments</b> and compose them into <b>2M synthetic images</b> with accurate masks, bounding boxes, and referring expressions.</p>
 
 # 📦 Installation
 
