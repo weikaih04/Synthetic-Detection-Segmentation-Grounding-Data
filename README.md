@@ -26,14 +26,13 @@
 <p align="center">
   <img src="./assets/teaser.png" alt="Text-to-Image Results" width="800">
 </p>
-<p align="center">A scalable pipeline for composing high-quality synthetic object segments into richly annotated images for object detection, instance segmentation, and visual grounding. We generate <b>20M object segments</b> and compose them into <b>2M synthetic images</b> with accurate masks, bounding boxes, and referring expressions.</p>
-
+<p align="center">A scalable pipeline for composing high-quality synthetic object segments into richly annotated images for object detection, instance segmentation, and visual grounding.</p>
 
 ## 🌟 Highlights
 
 **Why SOS?** A small amount of high-quality synthetic data can outperform orders of magnitude more real data:
 
-- 🚀 **Efficient & Scalable**: Just **50K** SOS images match the gains from **20M** model-generated (GRIT) or **200K** human-annotated (V3Det) images on LVIS detection. We scale to 10 million diverse images with annotations, along with 20 million synthetic objects across 47,000+ categories from Flux. 
+- 🚀 **Efficient & Scalable**: Just **50K** SOS images match the gains from **20M** model-generated (GRIT) or **200K** human-annotated (V3Det) images on LVIS detection. We scale to 10 million diverse images with annotations, along with 20 million synthetic objects across 47,000+ categories from Flux.
 - 🎯 **Accurate Annotations**: Object-centric composition provides pixel-perfect masks, boxes, and referring expressions—no noisy pseudo-labels
 - 🎨 **Controllable Generation**: Synthesize targeted data for specific scenarios (e.g., intra-class referring, rare categories, domain-specific applications)
 - 🔄 **Complementary to Real Data**: Adding SOS to existing datasets (COCO, LVIS, V3Det, GRIT) yields consistent additive gains across all benchmarks
@@ -41,6 +40,46 @@
 
 ---
 
+# 📊 Released Datasets
+
+We release the following datasets for research use:
+
+| Dataset Name | # Images | # Categories | Description | Download |
+|-------------|----------|--------------|-------------|----------|
+| **FC-50K** | 50,000 | 1,600 | Frequent Categories (LVIS, COCO, ADE20K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+| **FC-100K** | 100,000 | 1,600 | Frequent Categories (LVIS, COCO, ADE20K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+| **FC-400K** | 400,000 | 1,600 | Frequent Categories (LVIS, COCO, ADE20K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+| **GC-50K** | 50,000 | ~40,000 | General Categories (LAION, GQA, Flickr30K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+| **GC-100K** | 100,000 | ~40,000 | General Categories (LAION, GQA, Flickr30K) | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+| **SFC-50K** | 50,000 | 1,600 | Single Frequent Category - multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+| **SFC-100K** | 100,000 | 1,600 | Single Frequent Category - multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+| **SGC-50K** | 50,000 | ~40,000 | Single General Category - multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+| **SGC-100K** | 100,000 | ~40,000 | Single General Category - multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c) |
+
+**All datasets include:**
+- ✅ High-resolution images with photorealistic relighting and blending
+- ✅ Pixel-perfect segmentation masks
+- ✅ Tight bounding boxes
+- ✅ Category labels
+- ✅ Diverse referring expressions (attribute-based, spatial-based, and mixed)
+
+**Note:** Other dataset variants (e.g., SOS-LVIS, MixCOCO) contain segments from existing datasets and cannot be released. Please use the code in this repository to compose your own datasets from the released object segments.
+
+## Object Segments
+
+We also release **20M synthetic object segments** used to compose the above datasets:
+
+- **10M Frequent-Category Segments**: Covering 1,600 categories from LVIS, COCO, and ADE20K
+  - 200 diverse text prompts per category
+  - 3 object segments per prompt with different random seeds and viewpoints
+
+- **10M General-Category Segments**: Covering ~40,000 categories from LAION, GQA, and Flickr30K
+  - 10 diverse prompts per category
+  - 3 object segments per prompt
+
+Download all object segments from: [🤗 HuggingFace Collection](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c)
+
+---
 
 # 📦 Installation
 
@@ -72,22 +111,7 @@ pip install -r requirements_referring_expression_generation.txt
 ```
 
 
-# 📊 Data Preparation
-
-## Object Segments Dataset
-We provide **20M synthetic object segments** organized into two groups:
-
-- **10M Frequent-Category Segments**: Covering 1.6K categories from LVIS, COCO, and ADE20K
-  - 200 diverse text prompts per category
-  - 3 object segments per prompt with different random seeds and viewpoints
-
-- **10M General-Category Segments**: Covering ~40K categories from LAION, GQA, and Flickr30K
-  - 10 diverse prompts per category
-  - 3 object segments per prompt
-
-Download all object segments from: https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c
-
-## Background Dataset
+## Background Dataset (Optional)
 If you want to relight images and didn't directly paste object segments into the background, just use a random image as the background and set the `hasBackground` to false in the `generate_batch.py`
 
 You can download the BG-20K from this repo: https://github.com/JizhiziLi/GFM.git
@@ -392,30 +416,6 @@ We compare SOS with established synthetic augmentation methods:
 - ✅ **Segment quality impacts results**: SOS segments outperform other synthetic segment sources
 
 <!-- *For figures, tables, and full details see the [paper PDF](./paper.pdf) and supplementary materials.*   -->
-
----
-
-# 📚 SOS Datasets
-
-We provide multiple dataset variants for different experimental settings:
-
-| Dataset Name | Description | Use Case |
-|-------------|-------------|----------|
-| **FC-X** | X images from Frequent Categories (1.6K categories) | Open-vocabulary detection/grounding |
-| **GC-X** | X images from General Categories (~40K categories) | Open-vocabulary detection/grounding |
-| **SOS-LVIS** | Images using only LVIS category segments | LVIS instance segmentation |
-| **SFC-X** | Single Frequent Category - multiple instances per image with varied attributes | Intra-class referring |
-| **SGC-X** | Single General Category - multiple instances per image with varied attributes | Intra-class referring |
-| **MixCOCO** | Mix of COCO real segments + SOS synthetic segments (80 COCO categories) | Closed-vocabulary, limited-data regimes |
-
-**Example**: FC-50K = 50,000 synthetic images from the Frequent Category dataset
-
-All datasets include:
-- ✅ High-resolution images
-- ✅ Pixel-perfect segmentation masks
-- ✅ Tight bounding boxes
-- ✅ Category labels
-- ✅ Diverse referring expressions (for VG datasets)
 
 ---
 
