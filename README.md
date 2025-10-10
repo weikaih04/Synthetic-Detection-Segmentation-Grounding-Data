@@ -47,9 +47,9 @@ We release the following datasets for research use:
 | Dataset Name | # Images | # Categories | Description | Download |
 |-------------|----------|--------------|-------------|----------|
 | **FC-1M** | 1,000,000 | 1,600 | Frequent Categories | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-FC-1M) |
-| **GC-1M** | 1,000,000 | ~40,000 | General Categories | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-GC-1M) |
+| **GC-1M** | 1,000,000 | 47,000+ | General Categories | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-GC-1M) |
 | **SFC-200K** | 200,000 | 1,600 | Single-category Frequent Category — same category objects with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SFC-200K) |
-| **SGC-200K** | 200,000 | ~40,000 | Single-category General Category — same category objects with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SGC-200K) |
+| **SGC-200K** | 200,000 | 47,000+ | Single-category General Category — same category objects with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SGC-200K) |
 
 
 <p align="center"><small><b>Examples</b> of dataset types:</small></p>
@@ -83,7 +83,7 @@ We also release **20M synthetic object segments** used to compose the above data
   - 200 diverse text prompts per category
   - 3 object segments per prompt with different random seeds and viewpoints
 
-- **10M General-Category Segments**: Covering ~40,000 categories from LAION, GQA, and Flickr30K
+- **10M General-Category Segments**: Covering 47,000+ categories from LAION, GQA, and Flickr30K
   - 10 diverse prompts per category
   - 3 object segments per prompt
 
