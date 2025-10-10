@@ -46,10 +46,10 @@ We release the following datasets for research use:
 
 | Dataset Name | # Images | # Categories | Description | Download |
 |-------------|----------|--------------|-------------|----------|
-| **FC-1M** | 1,000,000 | 1,600 | Frequent Categories (LVIS, COCO, ADE20K) | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-FC-1M) |
-| **GC-1M** | 1,000,000 | ~40,000 | General Categories (LAION, GQA, Flickr30K) | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-GC-1M) |
-| **SFC-200K** | 200,000 | 1,600 | Single Frequent Category — multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SFC-200K) |
-| **SGC-200K** | 200,000 | ~40,000 | Single General Category — multiple instances with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SGC-200K) |
+| **FC-1M** | 1,000,000 | 1,600 | Frequent Categories | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-FC-1M) |
+| **GC-1M** | 1,000,000 | ~40,000 | General Categories | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-GC-1M) |
+| **SFC-200K** | 200,000 | 1,600 | Single-category Frequent Category — same category objects with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SFC-200K) |
+| **SGC-200K** | 200,000 | ~40,000 | Single-category General Category — same category objects with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SGC-200K) |
 
 **All datasets include:**
 - ✅ High-resolution images with photorealistic relighting and blending
