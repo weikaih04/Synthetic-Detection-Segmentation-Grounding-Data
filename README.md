@@ -436,11 +436,13 @@ We compare SOS with established synthetic augmentation methods:
 
 ---
 
+<!--
 # 📝 Citation
 
 ```bibtex
 # Bibtex: stay tuned for ArXiv!
 ```
+-->
 
 ---
 
