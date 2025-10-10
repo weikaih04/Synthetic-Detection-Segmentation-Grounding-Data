@@ -79,15 +79,12 @@ We release the following datasets for research use:
 
 We also release **20M synthetic object segments** used to compose the above datasets:
 
-- **10M Frequent-Category Segments**: Covering 1,600 categories from LVIS, COCO, and ADE20K
-  - 200 diverse text prompts per category
-  - 3 object segments per prompt with different random seeds and viewpoints
+| Segment Set | # Segments | # Categories | Prompts/Category | Segments/Prompt | Download |
+|-------------|------------|--------------|------------------|-----------------|----------|
+| **FC Object Segments** | 10,000,000 | 1,600 | 200 | 3 | [🤗 SOS-FC-Object-Segments-10M](https://huggingface.co/datasets/weikaih/SOS-FC-Object-Segments-10M) |
+| **GC Object Segments** | 10,000,000 | 47,000+ | 10 | 3 | [🤗 SOS-GC-Object-Segments-10M](https://huggingface.co/datasets/weikaih/SOS-GC-Object-Segments-10M) |
 
-- **10M General-Category Segments**: Covering 47,000+ categories from LAION, GQA, and Flickr30K
-  - 10 diverse prompts per category
-  - 3 object segments per prompt
-
-Download all object segments from: [🤗 HuggingFace Collection](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c)
+Browse all sets via the collection: [🤗 HuggingFace Collection](https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c)
 
 ---
 
@@ -143,6 +140,45 @@ python scripts/generate_with_batch.py \
     --json_save_path "/output/dataset_name/annotations/panoptic_train.json"
 ```
 
+
+### Key parameters
+- --num_processes: Number of parallel workers to generate images; set based on CPU cores.
+- --total_images: Total images to generate.
+- --filtering_setting: One of filter_0..filter_4 (filter_4 = strictest). Controls segment quality filters.
+- --image_save_path: Output path for rendered RGBA images (PNG).
+- --mask_save_path: Output path for color panoptic masks (PNG).
+- --annotation_path: Output folder for per-image JSONs and category maps.
+- --json_save_path: Final merged COCO-style panoptic JSON path.
+
+Important: At the end of scripts/generate_with_batch.py, available_object_datasets must point to your local copies of released FC/GC object segments and their metadata JSON. For example, if you downloaded SOS-FC-Object-Segments-10M to /data/fc_10m with metadata fc_object_segments_metadata.json, set:
+- dataset_path="/data/fc_10m"
+- synthetic_annotation_path="/data/fc_10m/fc_object_segments_metadata.json"
+Similarly for GC: gc_object_segments_metadata.json
+
+
+
+
+Notes
+- We expect dataset_path to contain category/subcategory/ID.png structure as provided in our released object-segment datasets.
+- The script writes per-image JSONs under annotation_path/separate_annotations and merges them into the final COCO-style panoptic JSON at json_save_path.
+
+Minimal example
+```bash
+# Symlink your datasets to the default paths expected by the script (optional)
+ln -s /data/fc_10m /fc_10m
+ln -s /data/gc_10m /gc_10m
+
+# Generate a tiny sample dataset locally
+python scripts/generate_with_batch.py \
+  --num_processes 4 \
+  --total_images 20 \
+  --filtering_setting filter_0 \
+  --image_save_path "./out/train" \
+  --mask_save_path "./out/panoptic_train" \
+  --annotation_path "./out/annotations" \
+  --json_save_path "./out/annotations/panoptic_train.json"
+```
+
 If you want to generate images that directly paste objects onto backgrounds, uncomment the `with bg process_image_worker` function in `scripts/generate_with_batch.py`.
 
 ## Relighting and Blending
@@ -161,16 +197,71 @@ python relighting_and_blending/inference.py \
 
 Currently supports Google Cloud Storage access and local file system.
 
+Notes
+- Requires a CUDA GPU. Models load in half precision; 12GB+ VRAM recommended.
+- Weights auto-download on first run:
+  - Stable Diffusion components from stablediffusionapi/realistic-vision-v51
+  - Background remover briaai/RMBG-1.4
+  - IC-Light offset iclight_sd15_fc.safetensors (downloaded to ./models if missing)
+- Input expectations:
+  - dataset_path should point to the folder with RGBA foreground PNGs (e.g., ./out/train) named 0.png, 1.png, ...
+  - A matching color panoptic mask must exist at the same id under dataset_path with "train" replaced by "panoptic_train" (e.g., ./out/panoptic_train/0.png)
+- illuminate_prompts_path must be a JSON file containing an array of prompt strings for relighting.
+
+Minimal example
+````bash
+# Create a tiny illumination prompt list
+cat > ./illumination_prompt.json << 'JSON'
+[
+  "golden hour lighting, soft shadows",
+  "overcast daylight, diffuse light",
+  "studio softbox lighting"
+]
+JSON
+
+# Relight a small sample from the composed outputs
+python relighting_and_blending/inference.py \
+  --dataset_path ./out/train \
+  --output_data_path ./out/relit \
+  --num_splits 1 \
+  --split 0 \
+  --illuminate_prompts_path ./illumination_prompt.json
+````
+
+
 ## Referring Expression Generation
-Generate diverse referring expressions (attribute-based, spatial-based, and mixed) using QwQ-32B:
+We use an OpenAI-compatible endpoint (vLLM) and query a local model.
 
-```bash
-python referring_expression_generation/inference.py "${TOTAL_JOBS}" "${JOB_INDEX}" "${INPUT_FILE}" "${OUTPUT_DIR}"
-```
+Step 1) Start an OpenAI-compatible server (port 8080)
+````bash
+# Example: start vLLM OpenAI server with the model used in our script
+python -m vllm.entrypoints.openai.api_server \
+  --model Qwen/QwQ-32B-AWQ \
+  --host 0.0.0.0 \
+  --port 8080
+````
+Notes
+- Our script currently assumes base_url=http://localhost:8080/v1.
+- Ensure your GPU/driver supports the chosen model; adjust model name if needed.
 
-This generates at least 9 referring expressions per image (3-6 expressions for each type).
+Step 2) Run the generator
+````bash
+# INPUT_FILE is the merged COCO-style JSON from the composing stage
+# OUTPUT_DIR will contain jsonl shards (one per job): job_0.jsonl, ...
+export OPENAI_API_KEY=dummy_key  # any non-empty string is accepted
 
-Currently supports Google Cloud Storage access and local file system.
+python referring_expression_generation/inference.py \
+  1 \
+  0 \
+  ./out/annotations/panoptic_train.json \
+  ./out/refexp \
+  --api_key "$OPENAI_API_KEY" \
+  --num_workers 8
+````
+Outputs
+- At least 9 expressions per image (balanced across attribute/spatial/reasoning, single/multi).
+- Writes per-job jsonl files under OUTPUT_DIR.
+- Supports local paths and GCS (gs://) for both inputs and outputs.
 
 
 
