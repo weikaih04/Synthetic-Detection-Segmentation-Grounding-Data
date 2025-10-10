@@ -51,6 +51,15 @@ We release the following datasets for research use:
 | **SFC-200K** | 200,000 | 1,600 | Single-category Frequent Category — same category objects with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SFC-200K) |
 | **SGC-200K** | 200,000 | ~40,000 | Single-category General Category — same category objects with varied attributes | [🤗 HuggingFace](https://huggingface.co/datasets/weikaih/SOS-SGC-200K) |
 
+
+<p align="center"><small><b>Examples</b> of dataset types:</small></p>
+<p align="center">
+  <img src="./assets/fcgc.png" alt="FC/GC examples" width="800">
+</p>
+<p align="center">
+  <img src="./assets/sfcsgc.png" alt="SFC/SGC examples" width="800">
+</p>
+
 **All datasets include:**
 - ✅ High-resolution images with photorealistic relighting and blending
 - ✅ Pixel-perfect segmentation masks
