@@ -3,14 +3,14 @@
 </h1>
 
 <h2 align="center" style="color: #ef4444;">
-  10M Diverse, Accurate Synthetic Dense-Annotated Images + 20M Synthetic Objects to Supercharge Grounding-DINO, Mask2Former, and Any Detectors / Segmentors / Grounding-VLMs
+  1M Diverse, Accurate Synthetic Dense-Annotated Images + 20M Synthetic Objects to Supercharge Grounding-DINO, Mask2Former, and Any Detectors / Segmentors / Grounding-VLMs
 </h2>
 
 
 <h2 align="center">
   <!-- <a href="https://generate-any-scene.github.io/">🌐 Website</a> | -->
   <a href="./assets/paper.pdf">📑 Paper</a> |
-  <a href="https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c">🤗  Dataset (10M images + 20M objects))</a>
+  <a href="https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c">🤗  Dataset (1M images + 20M objects))</a>
 </h2>
 
 <p align="center"><small>
