@@ -3,7 +3,7 @@
 </h1>
 
 <h2 align="center" style="color: #ef4444;">
-  1M Diverse, Accurate Synthetic Dense-Annotated Images + 20M Synthetic Objects to Supercharge Grounding-DINO, Mask2Former, and Any Detectors / Segmentors / Grounding-VLMs
+  1 Million Diverse, Accurate Synthetic Dense-Annotated Images + 20M Synthetic Objects to Supercharge Grounding-DINO, Mask2Former, and Any Detectors / Segmentors / Grounding-VLMs
 </h2>
 
 
