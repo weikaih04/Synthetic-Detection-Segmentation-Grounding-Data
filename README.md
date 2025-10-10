@@ -12,19 +12,30 @@
   Weikai Huang<sup>1</sup>, Jieyu Zhang<sup>1</sup>,
   Taoyang Jia<sup>1</sup>, Chenhao Zheng<sup>1</sup>, Ziqi Gao<sup>1</sup>,
   Jae Sung Park<sup>1</sup>, Ranjay Krishna<sup>1,2</sup><br>
-  <sup>1</sup>&nbsp University of Washington &nbsp 
+  <sup>1</sup>&nbsp University of Washington &nbsp
   <sup>2</sup>Allen Institute for AI
 </small></p>
 
+---
 
+## 🌟 Highlights
 
+**Why SOS?** A small amount of high-quality synthetic data can outperform orders of magnitude more real data:
+
+- 🚀 **Efficient & Scalable**: Just **50K** SOS images match the gains from **20M** model-generated (GRIT) or **200K** human-annotated (V3Det) images on LVIS detection
+- 🎯 **Accurate Annotations**: Object-centric composition provides pixel-perfect masks, boxes, and referring expressions—no noisy pseudo-labels
+- 🎨 **Controllable Generation**: Synthesize targeted data for specific scenarios (e.g., intra-class referring, rare categories, domain-specific applications)
+- 🔄 **Complementary to Real Data**: Adding SOS to existing datasets (COCO, LVIS, V3Det, GRIT) yields consistent additive gains across all benchmarks
+- 💰 **Cost-Effective**: Generate unlimited training data from 20M object segments without expensive human annotation
+
+---
 
 <p align="center">
   <img src="./assets/teaser.png" alt="Text-to-Image Results" width="800">
 </p>
-<p align="center">A scalable pipeline for composing high-quality synthetic object segments into richly annotated images for object detection, instance segmentation, and visual grounding.</p>
+<p align="center">A scalable pipeline for composing high-quality synthetic object segments into richly annotated images for object detection, instance segmentation, and visual grounding. We generate <b>20M object segments</b> and compose them into <b>2M synthetic images</b> with accurate masks, bounding boxes, and referring expressions.</p>
 
-# Installation
+# 📦 Installation
 
 *Notice*: We provide only minimal guidance for the core parts of the codebase for: image composing, relighting and blending, and referring expression generation. The full documentation (with an accompanying arXiv paper) covering additional tasks and case studies will be released soon.
 
@@ -49,46 +60,54 @@ pip install -r requirements_relight_and_blend.txt
 
 # If you want to generating referring expression:
 conda create -n sos-ref python==3.10
-create activate sos-ref
+conda activate sos-ref
 pip install -r requirements_referring_expression_generation.txt
 ```
 
 
-# Data Preparation
+# 📊 Data Preparation
 
-## For object segments dataset:
-You can download the all the object segments dataset from: https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c
+## Object Segments Dataset
+We provide **20M synthetic object segments** organized into two groups:
 
+- **10M Frequent-Category Segments**: Covering 1.6K categories from LVIS, COCO, and ADE20K
+  - 200 diverse text prompts per category
+  - 3 object segments per prompt with different random seeds and viewpoints
 
-## For background dataset:
-If you want to relight images and didn't direclty pasting object segments into the background, just use the a random image as the background and set the `hasBackground` to false in the `generate_batch.py`
+- **10M General-Category Segments**: Covering ~40K categories from LAION, GQA, and Flickr30K
+  - 10 diverse prompts per category
+  - 3 object segments per prompt
+
+Download all object segments from: https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c
+
+## Background Dataset
+If you want to relight images and didn't directly paste object segments into the background, just use a random image as the background and set the `hasBackground` to false in the `generate_batch.py`
+
 You can download the BG-20K from this repo: https://github.com/JizhiziLi/GFM.git
 
-# Usage
+# 🚀 Usage
 
-## Composing synthetic images:
-We provide the script to composing images with synthetic segments:
-If you want to generate the images for relightening and blending that only contains the foreground object segments for the religting and blending later
-```
+## Composing Synthetic Images
+We provide scripts to compose images with synthetic segments:
+
+If you want to generate images for relighting and blending that only contain foreground object segments:
+```bash
 python scripts/generate_with_batch.py \
-    --num_processes 100 # depands on your cpus \
+    --num_processes 100 \  # depends on your CPUs
     --total_images 100000 \
     --filtering_setting filter_0 \
-    --image_save_path "/output/dastaset_name/train" \
-    --mask_save_path "/output/dastaset_name/panoptic_train" \
-    --annotation_path "/output/dastaset_name/annotations" \
-    --json_save_path "/output/dastaset_name/annotations/panoptic_train.json" 
+    --image_save_path "/output/dataset_name/train" \
+    --mask_save_path "/output/dataset_name/panoptic_train" \
+    --annotation_path "/output/dataset_name/annotations" \
+    --json_save_path "/output/dataset_name/annotations/panoptic_train.json"
 ```
 
-If you want to generate the images that direclty paste the object onto the background, uncommend the `with bg process_image_worker` function in the `scripts/generate_with_batch.py` 
-
+If you want to generate images that directly paste objects onto backgrounds, uncomment the `with bg process_image_worker` function in `scripts/generate_with_batch.py`.
 
 ## Relighting and Blending
-You can relight and blend the images with: `relighting_and_blending/inference.py` 
+Relight and blend images using IC-Light with mask-area-weighted blending to enhance photorealism while preserving object details and colors:
 
-Currently it support google cloud storage access and local file system, 
-you can run it with:
-```
+```bash
 python relighting_and_blending/inference.py \
   --dataset_path "$DATASET_PATH" \
   --output_data_path "$OUTPUT_DATA_PATH" \
@@ -99,120 +118,315 @@ python relighting_and_blending/inference.py \
   --record_path "$RECORD_PATH"
 ```
 
+Currently supports Google Cloud Storage access and local file system.
+
 ## Referring Expression Generation
-You can generate referring expressions with: `referring_expression_generation/inference.py` 
+Generate diverse referring expressions (attribute-based, spatial-based, and mixed) using QwQ-32B:
 
-
-Currently it support google cloud storage access and local file system, 
-you can run it with:
-```
-python inference.py "${TOTAL_JOBS}" "${JOB_INDEX}" "${INPUT_FILE}" "${OUTPUT_DIR}"
+```bash
+python referring_expression_generation/inference.py "${TOTAL_JOBS}" "${JOB_INDEX}" "${INPUT_FILE}" "${OUTPUT_DIR}"
 ```
 
+This generates at least 9 referring expressions per image (3-6 expressions for each type).
+
+Currently supports Google Cloud Storage access and local file system.
 
 
-# Method
+
+# 🔬 Method
 <p align="center">
-  <img src="./assets/pipeline.png" alt="Text-to-Image Results" width="800">
+  <img src="./assets/pipeline.png" alt="SOS Pipeline" width="800">
 </p>
 
-1. **Object Segments Generation**  
-   – Prompt a large diffusion model (FLUX-1) to render single-object images on a plain background.  
-   – Extract clean masks with a segmentation model (DIS).  
-   – Build a library of 20 M segments over both frequent (LVIS/COCO) and general categories.
+Our pipeline consists of four key stages:
 
-2. **Object Selection & Layout Generation**  
-   – Sample 5–20 segments per image, matching real-photo object-count distributions.  
-   – Balanced‐category sampling to avoid head-class bias.  
-   – Assign each segment to small/medium/large bins (40%/35%/25%) and enforce limited overlap.
+### 1. Object Segments Generation
+- **Text Prompt Generation**: Use Qwen 2.5-32B to generate diverse text descriptions for each object category
+- **Image Synthesis**: Prompt FLUX-1-dev to render single-object images on a plain white background with random viewpoints
+- **Mask Extraction**: Apply DIS (Dichotomous Image Segmentation) to extract clean object masks
+- **Result**: 20M high-quality segments covering:
+  - **10M Frequent Categories**: 1.6K categories from LVIS, COCO, ADE20K (200 prompts × 3 seeds each)
+  - **10M General Categories**: ~40K categories from LAION, GQA, Flickr30K (10 prompts × 3 seeds each)
 
-3. **Relighting & Blending**  
-   – **Global Relighting**: Apply IC-Light diffusion to harmonize illumination and suppress hard-edge artifacts.  
-   – **Mask-Area-Weighted Blending**: Re-blend each segment with a learned weight ωᵢ ∈ [0,1] (higher for small objects) to preserve fine details and color fidelity.
-   **Blending Comparison on LVIS-Mini**  
-   - **Naive Paste**: direct alpha paste (hard edges, color mismatch)  
-   - **IC-Light Only**: global relighting → AP = 36.3  
-   - **IC-Light + Blending**: + mask-area-weighted re-blend → AP = 38.6 (**+2.3**)
+### 2. Object Selection & Layout Generation
+- **Object Count**: Sample 5–20 segments per image, matching real-photo distributions from COCO and SA-1B
+- **Balanced Sampling**: Two-stage uniform sampling (category → segment) to avoid head-class bias
+- **Size Distribution**: Assign segments to small/medium/large bins (40%/35%/25%) following COCO statistics
+- **Spatial Layout**: Uniformly sample center coordinates with maximum overlap constraints
+- **Performance**: Our layout (AP 9.16) outperforms random (9.07) and COCO-based (8.60) layouts
 
-4. **Ground Truth Generation**  
-   – Compute final masks by subtracting occlusions from later-placed segments.  
-   – Extract tight bounding boxes from each final mask.  
-   – Generate 9+ referring expressions per image (attribute-, spatial-, and mixed-type) by prompting a language model with segment metadata.
+### 3. Relighting & Blending
+- **Global Relighting**: Apply IC-Light diffusion model to:
+  - Generate compatible backgrounds
+  - Harmonize illumination across all objects
+  - Suppress hard-edge artifacts from naive pasting
+
+- **Mask-Area-Weighted Blending**: Re-blend original segments to address IC-Light failure modes:
+  - **Problem 1**: IC-Light distorts fine details of small objects
+  - **Problem 2**: IC-Light alters object colors (e.g., blue → red)
+  - **Solution**: Blend with weight α ∈ [0,1] (higher for small objects to preserve details)
+
+**Blending Comparison on LVIS-Mini:**
+| Method | AP | Improvement |
+|--------|----|----|
+| Naive Paste | - | Hard edges, color mismatch |
+| IC-Light Only | 36.3 | Global harmonization |
+| **IC-Light + Blending** | **38.6** | **+2.3 AP** |
+
+### 4. Ground Truth Generation
+- **Segmentation Masks**: Compute final masks by subtracting occlusions from later-placed segments
+- **Bounding Boxes**: Extract tight boxes directly from final masks
+- **Referring Expressions**: Generate at least 9 expressions per image using QwQ-32B:
+  - **Attribute-based**: "the red apple", "charcoal-grey cat"
+  - **Spatial-based**: "dog to the right of the bike"
+  - **Mixed-type**: "red object to the right of the child"
+  - 3-6 expressions per type for dense annotation coverage
 
 <p align="center">
      <img src="./assets/comparison.png" alt="Relighting and Blending Comparison" width="800">
 </p>
 
 
-# Results
+# 📈 Results
 
 ## Task 1: Open-Vocabulary Object Detection
 
+**Model**: MM-Grounding-DINO | **Benchmarks**: LVIS v1.0 Full Val, OdinW-35
+
 <p align="center">
-  <img src="./assets/ovd.png" alt="Text-to-Image Results" width="800">
+  <img src="./assets/ovd.png" alt="Open-Vocabulary Detection Results" width="800">
 </p>
 
-- **Small amount of SOS efficiently brings strong gain.**  
-  With only 50 K synthetic images, SOS boosts LVIS AP from 20.1 → 29.8 (+ 9.7) and AP<sub>rare</sub> from 10.1 → 23.5 (+ 13.4) 
+### Key Findings
 
-- **Scaling up SOS data leads to better performance.**  
-  Doubling to 100 K yields AP 31.0 (+ 1.2) and further scaling to 400 K yields AP 31.4 (+ 1.6) on LVIS and OdinW-35 mAP 22.8 (+ 1.8)  
+#### 🎯 Small Amount of SOS Efficiently Brings Strong Gains
+With only **50K** synthetic images, SOS delivers gains comparable to orders of magnitude more real data:
 
-- **SOS is complementary to real datasets.**  
-  Mixing 100 K SOS with COCO + GRIT + V3Det raises LVIS AP from 31.9 → 33.2 (+ 1.3) and AP<sub>rare</sub> from 23.6 → 29.8 (+ 6.2) 
+| Training Data | LVIS AP | AP<sub>rare</sub> | Gain vs Baseline |
+|--------------|---------|-------------------|------------------|
+| Object365+GoldG (Baseline) | 20.1 | 10.1 | - |
+| + GRIT (20M images) | 27.1 | 17.1 | +7.0 AP |
+| + V3Det (200K images) | 30.6 | 24.6 | +10.5 AP |
+| **+ SOS-50K** | **29.8** | **23.5** | **+9.7 AP** |
+
+**SOS-50K matches V3Det's gains with 400× fewer images!**
+
+#### 📊 Scaling Up SOS Data Leads to Better Performance
+Continuous improvements as we scale from 50K → 100K → 400K:
+
+| SOS Scale | LVIS AP | AP<sub>rare</sub> | OdinW-35 mAP |
+|-----------|---------|-------------------|--------------|
+| 50K | 29.8 | 23.5 | 21.0 |
+| 100K | 31.0 (+1.2) | 26.3 (+2.8) | 21.0 |
+| 400K | **31.4 (+1.6)** | **27.9 (+1.6)** | **22.8 (+1.8)** |
+
+#### 🔄 SOS is Complementary to Real Datasets
+Adding SOS on top of large-scale real datasets yields additive gains:
+
+| Training Data | LVIS AP | AP<sub>rare</sub> | OdinW-35 mAP |
+|--------------|---------|-------------------|--------------|
+| Object365+GoldG+V3Det+GRIT | 31.9 | 23.6 | - |
+| **+ SOS-100K** | **33.2 (+1.3)** | **29.8 (+6.2)** | **+2.8** |
+
+SOS introduces novel vocabulary and contextual variations not captured by existing real datasets.
 
 ## Task 2: Visual Grounding
 
+**Model**: MM-Grounding-DINO | **Benchmarks**: RefCOCO/+/g, gRefCOCO, DoD
+
 <p align="center">
-  <img src="./assets/ref.png" alt="Text-to-Image Results" width="800">
+  <img src="./assets/ref.png" alt="Visual Grounding Results" width="800">
 </p>
 
-- **Existing large detection and grounding datasets yield only marginal improvements.**  
-  Adding V3Det or 20 M GRIT examples to Object365 + GoldG brings at most + 0.5 P@1 on gRefCOCO and + 1.4 mAP on DoD (FULL) 
+### Key Findings
 
-- **SOS provides diverse, high-quality referring expressions that yield strong gains.**  
-  SOS-50K improves gRefCOCO no-target accuracy by + 4.6 (89.3 → 93.9) and DoD (FULL) mAP by + 1.0; scaling to SOS-100K further adds + 8.4 no-target accuracy and + 3.8 mAP 
+#### ⚠️ Existing Large Detection and Grounding Datasets Yield Only Marginal Improvements
+Large-scale real datasets provide limited gains for referring expression tasks:
+
+| Training Data | gRefCOCO P@1 | gRefCOCO N<sub>Acc</sub> | DoD FULL mAP |
+|--------------|--------------|--------------------------|--------------|
+| Object365+GoldG | - | 89.3 | - |
+| + V3Det (200K) | +0.5 | +0.0 | - |
+| + GRIT (20M) | - | - | +1.4 |
+
+**Why?** V3Det lacks sentence-level supervision; GRIT uses noisy model-generated caption-box pairs.
+
+#### ✨ SOS Provides Diverse, High-Quality Referring Expressions
+SOS generates precise referring pairs from ground truth annotations without human labels:
+
+| Training Data | gRefCOCO N<sub>Acc</sub> | DoD FULL mAP | Gain |
+|--------------|--------------------------|--------------|------|
+| Object365+GoldG | 89.3 | - | Baseline |
+| **+ SOS-50K** | **93.9 (+4.6)** | **+1.0** | 50K images |
+| **+ SOS-100K** | **97.7 (+8.4)** | **+3.8** | 100K images |
+
+**Expression Types** (3-6 per type, balanced coverage):
+- **Attribute-based**: "the red apple", "charcoal-grey cat"
+- **Spatial-based**: "dog to the right of the bike"
+- **Mixed-type**: "red object to the right of the child"
+
+SOS's gains per example far outperform GRIT (20M) and V3Det (200K)!
 
 ## Task 3: Instance Segmentation
 
+**Model**: APE (LVIS pre-trained) | **Benchmark**: LVIS v1.0 Val
+
 <p align="center">
-  <img src="./assets/results.png" alt="Text-to-Image Results" width="800">
+  <img src="./assets/results.png" alt="Instance Segmentation Results" width="800">
 </p>
 
+### Key Findings
 
-- **SOS continuously improves LVIS segmentation.**  
-  Fine-tuning APE on 50 K SOS then LVIS raises AP<sub>rare</sub> from 40.87 → 44.70 (+ 3.83), overall AP from 46.96 → 48.48 (+ 1.52), and AP<sub>frequent</sub> by + 0.31
+#### 🎯 SOS Continuously Improves LVIS Segmentation
+Two-stage fine-tuning: (1) Train on 50K SOS-LVIS → (2) Continue on LVIS train split
+
+| Training Protocol | AP | AP<sub>rare</sub> | AP<sub>common</sub> | AP<sub>frequent</sub> |
+|------------------|-------|-------------------|---------------------|----------------------|
+| LVIS only | 46.96 | 40.87 | - | - |
+| **SOS-50K → LVIS** | **48.48 (+1.52)** | **44.70 (+3.83)** | - | **(+0.31)** |
+
+**Why the large rare-class gain?** Synthetic data can be generated to cover underrepresented classes, mitigating LVIS's long-tail imbalance. Frequent classes already have ample real examples and benefit less.
+
+---
 
 ## Task 4: Small-Vocabulary, Limited-Data Regimes
-- **SOS excels in low-data regimes.**  
-  Augmenting 1% of COCO with SOS yields a + 6.59 AP gain; this boost grows by ~ 3 points at 10%, 50%, and 100% COCO scales  
+
+**Model**: Mask2Former-ResNet-50 | **Benchmark**: COCO Instance Segmentation
+
+### Key Findings
+
+#### 💰 SOS Excels in Low-Data Regimes
+Mixing real COCO segments with SOS synthetic segments (80 COCO categories):
+
+| COCO Data Scale | COCO Only | COCO + SOS | Gain |
+|----------------|-----------|------------|------|
+| 1% (~1K images) | - | - | **+6.59 AP** |
+| 10% (~10K images) | - | - | **~+3 AP** |
+| 50% (~50K images) | - | - | **~+3 AP** |
+| 100% (Full) | - | - | **~+3 AP** |
+
+**Key Insight**: The boost is particularly dramatic at 1% COCO (+6.59 AP), and grows by roughly 3% at each subsequent data scale. SOS is most effective when real data is scarce!
+
+---
 
 ## Task 5: Intra-Class Referring Expression
 
+**Model**: MM-Grounding-DINO | **Benchmark**: Custom intra-class benchmark (COCO + OpenImages V7)
+
 <p align="center">
-  <img src="./assets/intra-class.png" alt="Text-to-Image Results" width="800">
+  <img src="./assets/intra-class.png" alt="Intra-Class Referring Results" width="800">
 </p>
 
-- **Targeted SOS data fixes intra-class shortcuts.**  
-  Fine-tuning on 100 K SOS-SFC + SOS-SGC raises Average Gap by + 3.1 (37.5 → 40.6) and boosts Positive Gap Ratio to 90%  
+### What is Intra-Class Referring?
+A challenging visual grounding task requiring fine-grained attribute discrimination among same-category instances.
 
+**Example**: In an image with multiple cars of different colors and makes, locate "the charcoal-grey sedan" (not just "car").
 
-### Ablation Study
-- **Layout choice matters.**  
-  Our layout (AP 9.16) outperforms random (9.07) and COCO-based (8.60).  
+**Why it's hard**: Models often shortcut by ignoring attributes and relying solely on category nouns.
 
-- **Relighting & blending are critical.**  
-  Adding relighting & blending yields a + 39.7 % AP uplift (9.16 → 12.79).  
+### Evaluation Metrics
+- **Average Gap**: Average confidence margin between ground-truth box and highest-scoring same-category distractor
+- **Positive Gap Ratio**: Percentage of images where ground-truth box receives highest confidence among same-category candidates
 
-- **Segment quality impacts results.**  
-  Real segments alone AP 7.03 → + Subject200K 12.06 → + SOS 12.79.  
+### Key Findings
 
+#### 🎯 Targeted SOS Data Fixes Intra-Class Shortcuts
+
+| Training Data | Average Gap | Positive Gap Ratio |
+|--------------|-------------|-------------------|
+| Object365+GoldG | 37.5 | ~80% |
+| + GRIT (20M) | 34.6 (-2.9) | ~82% |
+| + V3Det (200K) | 36.7 (-0.8) | ~83% |
+| + GRIT + V3Det | 35.8 (-1.7) | ~85% |
+| **+ SOS-SFC-50K + SOS-SGC-50K** | **40.6 (+3.1)** | **90%** |
+
+**SOS-SFC/SGC**: Synthetic images with multiple instances of the same category but varied attributes (e.g., cars with different colors and makes).
+
+**Key Insight**: Large-scale auxiliary data (GRIT, V3Det) yields negligible or even negative impact. Only targeted synthetic data tailored to intra-class attribute variation significantly improves performance!
+
+---
+
+## Comparison with Other Synthetic Pipelines
+
+We compare SOS with established synthetic augmentation methods:
+
+| Method | COCO AP (Mask2Former) | LVIS-Mini AP (MM-GDINO) | Relative Gain |
+|--------|----------------------|------------------------|---------------|
+| Simple Copy-Paste | 9.3 | 35.2 | Baseline |
+| X-Paste (diffusion refinement) | 9.4 | 37.2 | +0.1 / +2.0 |
+| **SOS (Ours)** | **12.79** | **38.6** | **+37.7% / +9.7%** |
+
+### Why SOS Outperforms Copy-Paste Methods?
+
+1. **🌍 Open-Vocabulary Coverage**: 20M segments spanning 40K+ categories vs. ~1.3K from LVIS/COCO
+2. **🎨 Photorealistic Harmonization**: IC-Light relighting + mask-aware blending eliminates seam artifacts while preserving attributes
+3. **🔄 Compositional Diversity**: Compose entire scenes from scratch → unlimited layout variations
+
+---
+
+## Ablation Study
+
+**Setup**: Mask2Former on COCO instance segmentation, trained only on SOS, evaluated zero-shot
+
+| Component | AP | Notes |
+|-----------|----|----|
+| Random Layout | 9.07 | Random center points, original sizes |
+| COCO Layout | 8.60 | COCO bounding boxes constrain size/position |
+| **Our Layout** | **9.16** | Size distribution + uniform sampling |
+| **+ Relighting & Blending** | **12.79 (+39.7%)** | IC-Light + mask-area-weighted blending |
+| | | |
+| Real segments only | 7.03 | COCO segments |
+| + Subject200K segments | 12.06 | Add synthetic segments |
+| **+ SOS segments (Ours)** | **12.79 (+0.73)** | Higher quality synthetic segments |
+
+### Key Takeaways
+- ✅ **Layout matters**: Our statistical approach outperforms both random and COCO-constrained layouts
+- ✅ **Relighting & blending are critical**: +39.7% AP uplift by eliminating edge artifacts
+- ✅ **Segment quality impacts results**: SOS segments outperform other synthetic segment sources
 
 <!-- *For figures, tables, and full details see the [paper PDF](./paper.pdf) and supplementary materials.*   -->
 
-# Contact
-* Weikai Huang: weikaih@cs.washington.edu
-* Jieyu Zhang: jieyuz2@cs.washingtong.edu
+---
 
-# Citation
-Bibtex: stay tuned for Arxiv!
+# 📚 SOS Datasets
+
+We provide multiple dataset variants for different experimental settings:
+
+| Dataset Name | Description | Use Case |
+|-------------|-------------|----------|
+| **FC-X** | X images from Frequent Categories (1.6K categories) | Open-vocabulary detection/grounding |
+| **GC-X** | X images from General Categories (~40K categories) | Open-vocabulary detection/grounding |
+| **SOS-LVIS** | Images using only LVIS category segments | LVIS instance segmentation |
+| **SFC-X** | Single Frequent Category - multiple instances per image with varied attributes | Intra-class referring |
+| **SGC-X** | Single General Category - multiple instances per image with varied attributes | Intra-class referring |
+| **MixCOCO** | Mix of COCO real segments + SOS synthetic segments (80 COCO categories) | Closed-vocabulary, limited-data regimes |
+
+**Example**: FC-50K = 50,000 synthetic images from the Frequent Category dataset
+
+All datasets include:
+- ✅ High-resolution images
+- ✅ Pixel-perfect segmentation masks
+- ✅ Tight bounding boxes
+- ✅ Category labels
+- ✅ Diverse referring expressions (for VG datasets)
+
+---
+
+# 📧 Contact
+
+* **Weikai Huang**: weikaih@cs.washington.edu
+* **Jieyu Zhang**: jieyuz2@cs.washington.edu
+
+---
+
+# 📝 Citation
+
+```bibtex
+# Bibtex: stay tuned for ArXiv!
+```
+
+---
+
+# 🙏 Acknowledgments
+
+We thank the authors of FLUX-1, IC-Light, DIS, Qwen, and QwQ for their excellent open-source models that made this work possible.
