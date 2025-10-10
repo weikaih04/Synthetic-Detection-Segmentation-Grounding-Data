@@ -38,6 +38,11 @@
 - 🔄 **Complementary to Real Data**: Adding SOS to existing datasets (COCO, LVIS, V3Det, GRIT) yields consistent additive gains across all benchmarks
 - 💰 **Cost-Effective**: Generate unlimited training data from 20M object segments without expensive human annotation
 
+
+<p align="center" style="color:#ef4444; font-weight:700;">
+  Provision: Included in Salesforce's BLIP-3 training mixture
+</p>
+
 ---
 
 # 📊 Released Datasets
