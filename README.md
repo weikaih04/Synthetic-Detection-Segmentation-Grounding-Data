@@ -527,13 +527,19 @@ We compare SOS with established synthetic augmentation methods:
 
 ---
 
-<!--
-# 📝 Citation
+## 📝 Citation
 
 ```bibtex
-# Bibtex: stay tuned for ArXiv!
+@misc{huang2025sossyntheticobjectsegments,
+  title={SOS: Synthetic Object Segments Improve Detection, Segmentation, and Grounding},
+  author={Weikai Huang and Jieyu Zhang and Taoyang Jia and Chenhao Zheng and Ziqi Gao and Jae Sung Park and Ranjay Krishna},
+  year={2025},
+  eprint={2510.09110},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2510.09110},
+}
 ```
--->
 
 ---
 
