@@ -1,5 +1,5 @@
 <h1 align="center">
-  SOS: Synthetic Object Segments Improve Detection, Segmentation, and Grounding
+  Synthetic Object Compostions for Scalable and Accurate Learning in Detection, Segmentation, and Grounding
 </h1>
 
 <h2 align="center" style="color: #ef4444;">
