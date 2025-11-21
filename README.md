@@ -3,14 +3,14 @@
 </h1>
 
 <h2 align="center" style="color: #ef4444;">
-  1 Million Diverse, Accurate Synthetic Dense-Annotated Images + 20M Synthetic Objects to Supercharge Grounding-DINO, Mask2Former, and Any Detectors / Segmentors / Grounding-VLMs
+  2 Million Diverse, Accurate Synthetic Dense-Annotated Images (FC-1M + GC-1M) + 20M Synthetic Object Segments to Supercharge Grounding-DINO, Mask2Former, and Any Detectors / Segmentors / Grounding-VLMs
 </h2>
 
 
 <h2 align="center">
   <!-- <a href="https://generate-any-scene.github.io/">🌐 Website</a> | -->
   <a href="https://arxiv.org/abs/2510.09110">📑 Paper</a> |
-  <a href="https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c">🤗  Datasets: 1M images + 20M segments</a>
+  <a href="https://huggingface.co/collections/weikaih/sos-synthetic-object-segments-improves-detection-segmentat-682679751d20faa20800033c">🤗  Datasets: 2M images + 20M segments</a>
 </h2>
 
 <p align="center"><small>
@@ -32,11 +32,13 @@
 
 **Why SOS?** A small amount of high-quality synthetic data can outperform orders of magnitude more real data:
 
-- 🚀 **Efficient & Scalable**: Just **50K** SOS images match the gains from **20M** model-generated (GRIT) or **200K** human-annotated (V3Det) images on LVIS detection. We scale to 10 million diverse images with annotations, along with 20 million synthetic objects across 47,000+ categories from Flux.
+- 🚀 **Efficient & Scalable**: Just **50K** SOS images match the gains from **20M** model-generated (GRIT) or **200K** human-annotated (V3Det) images on LVIS detection. We compose 2 million diverse images (FC-1M + GC-1M) with annotations, along with 20 million synthetic object segments across 47,000+ categories from Flux.
 - 🎯 **Accurate Annotations**: Object-centric composition provides pixel-perfect masks, boxes, and referring expressions—no noisy pseudo-labels
 - 🎨 **Controllable Generation**: Synthesize targeted data for specific scenarios (e.g., intra-class referring, rare categories, domain-specific applications)
 - 🔄 **Complementary to Real Data**: Adding SOS to existing datasets (COCO, LVIS, V3Det, GRIT) yields consistent additive gains across all benchmarks
 - 💰 **Cost-Effective**: Generate unlimited training data from 20M object segments without expensive human annotation
+- 📈 **100K SOS surpasses larger real-data baselines**: +10.9 LVIS AP (OVD) and +8.4 gRefCOCO NAcc (VG); and remains complementary when combined with GRIT/V3Det
+
 
 ---
 
@@ -109,7 +111,7 @@ pip install -r requirements.txt
 # If you want to perform relighting and blending:
 conda create -n sos-relight python==3.10
 conda activate sos-relight
-pip install -r requirements_relight_and_blend.txt
+pip install -r requirements_relight_and_blending.txt
 
 # If you want to generating referring expression:
 conda create -n sos-ref python==3.10
@@ -119,7 +121,7 @@ pip install -r requirements_referring_expression_generation.txt
 
 
 ## Background Dataset (Optional)
-If you want to relight images and didn't directly paste object segments into the background, just use a random image as the background and set the `hasBackground` to false in the `generate_batch.py`
+If you want to relight images and didn't directly paste object segments into the background, just use a random image as the background and set the `hasBackground` to false in `scripts/generate_with_batch.py`
 
 You can download the BG-20K from this repo: https://github.com/JizhiziLi/GFM.git
 
