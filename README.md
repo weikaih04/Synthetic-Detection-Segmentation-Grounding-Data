@@ -92,8 +92,6 @@ Browse all sets via the collection: [🤗 HuggingFace Collection](https://huggin
 
 # 📦 Installation
 
-*Notice*: We provide only minimal guidance for the core parts of the codebase for: image composing, relighting and blending, and referring expression generation. The full documentation (with an accompanying arXiv paper) covering additional tasks and case studies will be released soon.
-
 ## Environment Setup
 Follow the steps below to set up the environment and use the repository:
 ```bash
